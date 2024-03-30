@@ -40,7 +40,7 @@ def extract_article_content(url):
             </html>
             """
 
-            directory = "./articles"
+            directory = "../articles/"
             os.makedirs(directory, exist_ok=True)
 
             filename = os.path.join(directory, f"{sanitized_title}.html")

@@ -82,7 +82,7 @@ def extract_article_content(url):
             """
 
             # Save PDF file in the ./articles directory
-            directory = "./articles"
+            directory = "../articles/"
             os.makedirs(
                 directory, exist_ok=True
             )  # Create directory if it doesn't exist

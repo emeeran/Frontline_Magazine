@@ -1,49 +1,31 @@
-import pytest
-import datetime
-from module_1 import days_between_dates, calculate_weighted_moving_average, is_powerful
+import os
+import unittest
+from unittest.mock import patch
+from fetch_article_html import extract_article_content
 
-# Test for days_between_dates function
-@pytest.mark.parametrize("date1, date2, expected", [
-    ("2023-01-01", "2023-01-02", 1, "ID_01_one_day_difference"),
-    ("2023-01-01", "2023-01-01", 0, "ID_02_same_day"),
-    ("2023-01-01", "2022-12-31", -1, "ID_03_negative_difference"),
-    ("2020-02-29", "2021-02-28", 365, "ID_04_leap_year_to_non_leap"),
-])
-def test_days_between_dates(date1, date2, expected):
-    # Act
-    result = days_between_dates(date1, date2)
+class TestArticleExtraction(unittest.TestCase):
     
-    # Assert
-    assert result == expected
+    @patch('builtins.input', return_value="https://example.com/article")
+    def test_pdf_generation(self, mock_input):
+        extract_article_content("https://example.com/article")
+        pdf_filename = os.path.join("articles", "sample_article_title.pdf")
+        self.assertTrue(os.path.exists(pdf_filename))
 
-# Test for calculate_weighted_moving_average function
-@pytest.mark.parametrize("prices, weights, expected", [
-    ([10, 20, 30, 40, 50], [1, 2, 3], [30.0, 40.0, 50.0], "ID_01_basic"),
-    ([100], [1], [100.0], "ID_02_single_element"),
-    ([10, 20], [1, 2], [20.0], "ID_03_two_elements"),
-    ([], [], [], "ID_04_empty_lists_error"),
-    ([10, 20, 30], [1, 2, 3, 4], [], "ID_05_weights_longer_than_prices_error"),
-])
-def test_calculate_weighted_moving_average(prices, weights, expected):
-    if not prices or not weights or len(weights) > len(prices):
-        with pytest.raises(ValueError):
-            calculate_weighted_moving_average(prices, weights)
-    else:
-        # Act
-        result = calculate_weighted_moving_average(prices, weights)
-        
-        # Assert
-        assert result == expected
+    def test_html_content_creation(self):
+        test_title = "Sample Article Title"
+        test_publish_time = "2023-07-15"
+        test_paragraphs = ["Paragraph 1", "Paragraph 2"]
 
-# Test for is_powerful function
-@pytest.mark.parametrize("magic, expected", [
-    ("Sourcery", True, "ID_01_sourcery"),
-    ("More Sourcery", True, "ID_02_more_sourcery"),
-    ("Not Sourcery", False, "ID_03_not_sourcery"),
-])
-def test_is_powerful(magic, expected):
-    # Act
-    result = is_powerful(magic)
+        html_content = extract_article_content.create_html_content(test_title, test_publish_time, test_paragraphs)
+        self.assertIn(test_title, html_content)
+        self.assertIn(test_publish_time, html_content)
+        for paragraph in test_paragraphs:
+            self.assertIn(paragraph, html_content)
     
-    # Assert
-    assert result == expected
+    def test_invalid_character_sanitization(self):
+        invalid_title = 'Title with/invalid?characters*'
+        sanitized_title = extract_article_content.sanitize_title(invalid_title)
+        self.assertEqual(sanitized_title, 'Title with_invalid_characters_')
+
+if __name__ == '__main__':
+    unittest.main()
