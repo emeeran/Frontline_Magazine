@@ -56,10 +56,17 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "didalgo.chatgpt.ToolWindow.ACTIVE": "ONLINE",
-    "git-widget-placeholder": "trial-init",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "preferences.editor"
+  },
+  "keyToStringList": {
+    "GitStage.ChangesTree.GroupingKeys": [
+      "directory",
+      "module",
+      "repository"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
