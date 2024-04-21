@@ -101,7 +101,7 @@ def main():
     html_content = generate_html(data)
 
     with open(
-        f'../articles/Frontline_{data[0]["issue_date"]}.html', "w", encoding="utf-8"
+        f'./articles/Frontline_{data[0]["issue_date"]}.html', "w", encoding="utf-8"
     ) as f:
         f.write(html_content)
 
