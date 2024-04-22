@@ -6,7 +6,7 @@ def extract_article_content(url):
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        
+
         try:
             page.goto(url)
             article_content_selector = ".articlebodycontent.col-xl-9.col-lg-12.col-md-12.col-sm-12.col-12"
@@ -40,7 +40,7 @@ def extract_article_content(url):
             </html>
             """
 
-            directory = "../articles/"
+            directory = "./articles/"
             os.makedirs(directory, exist_ok=True)
 
             filename = os.path.join(directory, f"{sanitized_title}.html")
