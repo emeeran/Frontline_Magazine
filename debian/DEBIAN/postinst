@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+# Create virtual environment for the application
+VENV_DIR="/usr/share/frontline-magazine/venv"
+
+# Create virtual environment
+python3 -m venv $VENV_DIR
+
+# Activate virtual environment and install dependencies
+$VENV_DIR/bin/pip install --upgrade pip
+
+# Install Python dependencies
+$VENV_DIR/bin/pip install \
+    playwright==1.43.0 \
+    beautifulsoup4==4.12.3 \
+    pdfkit==1.0.0 \
+    requests==2.31.0
+
+# Install Playwright browsers
+$VENV_DIR/bin/playwright install chromium
+
+# Set proper permissions
+chown -R root:root /usr/share/frontline-magazine/
+chmod -R 755 /usr/share/frontline-magazine/
+chmod +x /usr/bin/frontline-magazine
+
+echo "Frontline Magazine has been installed successfully!"
+echo "You can run it from the command line with: frontline-magazine"
+echo "Or find it in your applications menu under 'Utilities'."
+
+exit 0

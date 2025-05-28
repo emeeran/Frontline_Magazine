@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+
+# Remove virtual environment
+if [ -d "/usr/share/frontline-magazine/venv" ]; then
+    rm -rf /usr/share/frontline-magazine/venv
+fi
+
+exit 0

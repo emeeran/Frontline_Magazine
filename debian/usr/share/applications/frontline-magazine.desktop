@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Frontline Magazine Scraper
+Comment=Extract articles from Frontline Magazine
+Exec=frontline-magazine gui
+Icon=frontline-magazine
+Terminal=false
+Categories=Utility;Office;
+Keywords=magazine;scraper;articles;frontline;news;

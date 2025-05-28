@@ -1,0 +1,19 @@
+Package: frontline-magazine
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: all
+Installed-Size: 76
+Depends: python3 (>= 3.8), python3-pip, python3-venv, python3-tk, wkhtmltopdf
+Maintainer: Frontline Magazine Tool <maintainer@example.com>
+Description: Frontline Magazine Article Scraper
+ A Python application for scraping articles from Frontline Magazine.
+ This tool can extract article content, generate HTML summaries,
+ and create PDF versions of articles from the Frontline Magazine website.
+ .
+ Features:
+  - Extract individual articles as HTML and PDF
+  - Generate magazine issue summaries
+  - Cross-platform compatibility
+  - Modern web scraping with Playwright
+Homepage: https://github.com/your-username/Frontline_Magazine

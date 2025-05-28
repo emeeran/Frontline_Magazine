@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# Frontline Magazine Article Scraper
+# Main executable script
+
+INSTALL_DIR="/usr/share/frontline-magazine"
+VENV_DIR="$INSTALL_DIR/venv"
+PYTHON_BIN="$VENV_DIR/bin/python"
+
+# Check if virtual environment exists
+if [ ! -f "$PYTHON_BIN" ]; then
+    echo "Error: Frontline Magazine is not properly installed."
+    echo "Please reinstall the package."
+    exit 1
+fi
+
+# Function to display usage
+show_usage() {
+    echo "Frontline Magazine Article Scraper v1.0.0"
+    echo ""
+    echo "Usage: frontline-magazine [COMMAND] [OPTIONS]"
+    echo ""
+    echo "Commands:"
+    echo "  titles          Extract magazine issue titles and generate HTML summary"
+    echo "  article-md      Extract individual article as Markdown"
+    echo "  article-html    Extract individual article as HTML"
+    echo "  article-pdf     Extract individual article as PDF (formatted)"
+    echo "  gui             Launch graphical user interface (if available)"
+    echo ""
+    echo "Examples:"
+    echo "  frontline-magazine titles"
+    echo "  frontline-magazine article-md"
+    echo "  frontline-magazine article-html"
+    echo "  frontline-magazine article-pdf"
+    echo "  frontline-magazine gui"
+    echo ""
+    echo "For more information, visit: https://github.com/your-username/Frontline_Magazine"
+}
+
+# Create output directory in user's home
+OUTPUT_DIR="$HOME/FrontlineMagazine"
+mkdir -p "$OUTPUT_DIR"
+
+# Change to output directory
+cd "$OUTPUT_DIR"
+
+# Parse command line arguments
+case "$1" in
+    "titles")
+        echo "Extracting magazine issue titles..."
+        $PYTHON_BIN "$INSTALL_DIR/fetch_titles_html.py"
+        echo "HTML file saved to: $OUTPUT_DIR"
+        ;;
+    "article-md")
+        echo "Extracting article as Markdown..."
+        $PYTHON_BIN "$INSTALL_DIR/fetch_article_md.py"
+        echo "Markdown file saved to: $OUTPUT_DIR"
+        ;;
+    "article-html")
+        echo "Extracting article as HTML..."
+        $PYTHON_BIN "$INSTALL_DIR/fetch_article_html.py"
+        echo "HTML file saved to: $OUTPUT_DIR"
+        ;;
+    "article-pdf")
+        echo "Extracting article as formatted PDF..."
+        $PYTHON_BIN "$INSTALL_DIR/fetch_article_pdf.py"
+        echo "PDF file saved to: $OUTPUT_DIR"
+        ;;
+    "gui")
+        echo "Launching GUI..."
+        $PYTHON_BIN "$INSTALL_DIR/frontline_gui.py"
+        ;;
+    "-h"|"--help"|"help")
+        show_usage
+        ;;
+    "")
+        show_usage
+        ;;
+    *)
+        echo "Unknown command: $1"
+        echo ""
+        show_usage
+        exit 1
+        ;;
+esac

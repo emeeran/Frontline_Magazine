@@ -39,73 +39,41 @@ def scrape_data(url):
         return data
 
 
-# Function to generate HTML file with extracted data
-def generate_html(data):
-    html_content = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Frontline Issue</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-            }
-            .article {
-                margin-bottom: 20px;
-                padding: 10px;
-                border: 1px solid #ccc;
-            }
-            .title {
-                font-size: 18px;
-                font-weight: bold;
-            }
-            .sub-text {
-                font-style: italic;
-            }
-            .author {
-                font-size: 14px;
-            }
-            .link {
-                color: blue;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Frontline Issue - {issue_date}</h1>
-    """
+# Function to generate Markdown file with extracted data
+def generate_markdown(data):
+    issue_date = data[0]['issue_date'] if data else 'Unknown'
+    markdown_content = f"""# Frontline Issue - {issue_date}
+
+"""
 
     for article in data:
-        html_content += f"""
-        <div class="article">
-            <div class="title">{article['title']}</div>
-            <div class="sub-text">{article['sub_text']}</div>
-            <div class="author">Author: {article['author']}</div>
-            <div class="link"><a href="{article['link']}" target="_blank">Read More</a></div>
-        </div>
-        """
+        markdown_content += f"""## {article['title']}
 
-    html_content += """
-    </body>
-    </html>
-    """
+*{article['sub_text']}*
 
-    return html_content
+**Author:** {article['author']}
+
+**Link:** [{article['title']}]({article['link']})
+
+---
+
+"""
+
+    return markdown_content
 
 
 # Main function
 def main():
     url = "https://frontline.thehindu.com/current-issue/"
     data = scrape_data(url)
-    html_content = generate_html(data)
+    markdown_content = generate_markdown(data)
 
     with open(
-        f'./articles/Frontline_{data[0]["issue_date"]}.html', "w", encoding="utf-8"
+        f'./articles/Frontline_{data[0]["issue_date"]}.md', "w", encoding="utf-8"
     ) as f:
-        f.write(html_content)
+        f.write(markdown_content)
 
-        print("HTML file created successfully.")
+        print("Markdown file created successfully.")
 
 
 if __name__ == "__main__":

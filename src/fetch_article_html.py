@@ -9,10 +9,47 @@ def extract_article_content(url):
 
         try:
             page.goto(url)
-            article_content_selector = ".articlebodycontent.col-xl-9.col-lg-12.col-md-12.col-sm-12.col-12"
-            title = page.query_selector("h1.title").inner_text()
-            publish_time = page.query_selector(".publish-time").inner_text()
-            paragraph_tags = page.query_selector_all(f"{article_content_selector} p")
+            
+            # Try multiple possible selectors for title
+            title_selectors = ["h1.title", "h1", ".article-title", ".headline", ".story-title"]
+            title = None
+            for selector in title_selectors:
+                title_element = page.query_selector(selector)
+                if title_element:
+                    title = title_element.inner_text()
+                    break
+            
+            if not title:
+                title = "Untitled Article"
+            
+            # Try multiple possible selectors for publish time
+            time_selectors = [".publish-time", ".published-date", ".date", ".timestamp"]
+            publish_time = None
+            for selector in time_selectors:
+                time_element = page.query_selector(selector)
+                if time_element:
+                    publish_time = time_element.inner_text()
+                    break
+            
+            if not publish_time:
+                from datetime import datetime
+                publish_time = f"Extracted on {datetime.now().strftime('%B %d, %Y')}"
+            
+            # Try multiple possible selectors for article content
+            content_selectors = [
+                ".articlebodycontent.col-xl-9.col-lg-12.col-md-12.col-sm-12.col-12 p",
+                ".article-content p",
+                ".story-content p",
+                ".content p",
+                ".entry-content p",
+                "article p"
+            ]
+            
+            paragraph_tags = []
+            for selector in content_selectors:
+                paragraph_tags = page.query_selector_all(selector)
+                if paragraph_tags:
+                    break
 
             # Filter out unwanted elements using list comprehension
             excluded_words = ["Also Read", "COMMents", "Follow Us", "SHARE"]
@@ -22,32 +59,28 @@ def extract_article_content(url):
 
             sanitized_title = re.sub(r'[<>:"/\|?*]', "_", title)  # Sanitize title for filename
 
-            # Create HTML content
-            html_content = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>{sanitized_title}</title>
-                <link rel="stylesheet" type="text/css" href="styles.css">
-            </head>
-            <body>
-                <div class="article-title">{sanitized_title}</div>
-                <div class="publish-time">{publish_time}</div>
-                <div class="article-content">
-                    {''.join(f"<p>{paragraph}</p>" for paragraph in filtered_paragraphs)}
-                </div>
-            </body>
-            </html>
-            """
+            # Create Markdown content
+            markdown_content = f"""# {title}
+
+**Published:** {publish_time}
+
+---
+
+{chr(10).join(paragraph for paragraph in filtered_paragraphs)}
+
+---
+
+*Source: {url}*
+"""
 
             directory = "./articles/"
             os.makedirs(directory, exist_ok=True)
 
-            filename = os.path.join(directory, f"{sanitized_title}.html")
+            filename = os.path.join(directory, f"{sanitized_title}.md")
             with open(filename, "w", encoding="utf-8") as file:
-                file.write(html_content)
+                file.write(markdown_content)
 
-            print(f"HTML file '{filename}' created successfully.")
+            print(f"Markdown file '{filename}' created successfully.")
 
         except TimeoutError:
             print("Timeout occurred while waiting for selector.")

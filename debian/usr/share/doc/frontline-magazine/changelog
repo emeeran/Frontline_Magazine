@@ -1,0 +1,11 @@
+frontline-magazine (1.0.0) stable; urgency=low
+
+  * Initial release
+  * Scrape Frontline Magazine articles
+  * Generate HTML summaries of magazine issues
+  * Extract individual articles as HTML and PDF
+  * Cross-platform support with Playwright
+  * Fixed issue date display bug
+  * Removed Windows-specific dependencies for Linux compatibility
+
+ -- Frontline Magazine Tool <maintainer@example.com>  Wed, 28 May 2025 12:00:00 +0000
